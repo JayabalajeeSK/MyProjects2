@@ -18,7 +18,7 @@ import com.jb.common_template.security.JwtAuthenticationFilter;
 
 @Configuration
 
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 
 public class SpringSecurityConfig 
 {

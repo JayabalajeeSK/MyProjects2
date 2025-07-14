@@ -8,26 +8,17 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Document 
-{
+public class DocCollection {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private String description;
-    private String fileName;
-    private String fileType;
-    private long fileSize;
-    private String filePath;
 
-    private boolean favorite; // ⭐ Favorite file
+    private String name;
 
     @ManyToOne
     private User owner;
-
-    @ManyToOne
-    private DocCollection collection; // ↪️ Belongs to one collection
 }

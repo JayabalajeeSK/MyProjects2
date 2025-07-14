@@ -54,6 +54,10 @@ public class AuthService
         return  user.getRole().toUpperCase().replaceFirst("(?i)^role_", "") +" registered successfully";
     }
 
+
+
+
+
     // ✅ Login User
     public String loginUser(LoginDto loginDto) 
     {

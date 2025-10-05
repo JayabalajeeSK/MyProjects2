@@ -2,6 +2,7 @@ package com.jb.document_management_system.service;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
@@ -36,19 +37,19 @@ public class DocumentService {
     @Autowired
     private DocCollectionRepository collectionRepository;
 
-    // ✅ Get currently authenticated user
+    // 🔑 Get logged-in user
     private User getCurrentUser() {
         String usernameOrEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userService.getByUsernameOrEmail(usernameOrEmail); // This method must support both username & email
+        return userService.getByUsernameOrEmail(usernameOrEmail);
     }
 
-    // ✅ Upload document (only registered & authenticated users)
-    public Document saveDocument(MultipartFile file, String title, String desc, boolean favorite, Long collectionId) throws IOException {
-        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        java.nio.file.Path path = Paths.get(uploadDir, fileName);
-        Files.copy(file.getInputStream(), path);
-
+    // ✅ Save document with directory check
+    public String <Document> saveDocument(MultipartFile file, String title, String desc, boolean favorite, Long collectionId) throws IOException {
+        // User fetch
         User user = getCurrentUser();
+
+        // File meta
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
         Document doc = new Document();
         doc.setTitle(title);
@@ -56,17 +57,21 @@ public class DocumentService {
         doc.setFileName(fileName);
         doc.setFileType(file.getContentType());
         doc.setFileSize(file.getSize());
-        doc.setFilePath(path.toString());
         doc.setFavorite(favorite);
         doc.setOwner(user);
 
+        // ⬇️ Save actual file bytes to DB
+        doc.setFileData(file.getBytes());
+
+        // Optional collection
         if (collectionId != null) {
             DocCollection collection = collectionRepository.findByIdAndOwnerId(collectionId, user.getId())
                     .orElseThrow(() -> new RuntimeException("Collection not found"));
             doc.setCollection(collection);
         }
 
-        return documentRepository.save(doc);
+        documentRepository.save(doc);
+        return "ok";
     }
 
     // ✅ Delete document

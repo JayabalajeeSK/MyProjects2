@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+
 @RestController
 
 @RequestMapping("/api/documents")
@@ -23,6 +23,7 @@ public class DocumentController {
     private DocumentService documentService;
 
     // ✅ Upload
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/upload")
     public ResponseEntity<Document> upload(
             @RequestParam("file") MultipartFile file,
@@ -30,7 +31,8 @@ public class DocumentController {
             @RequestParam(required = false) String desc,
             @RequestParam(defaultValue = "false") boolean favorite,
             @RequestParam(required = false) Long collectionId
-    ) throws IOException {
+    ) throws IOException 
+    {
         Document doc = documentService.saveDocument(file, title, desc, favorite, collectionId);
         return ResponseEntity.ok(doc);
     }

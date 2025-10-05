@@ -63,6 +63,7 @@ public class SpringSecurityConfig
                 // authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
 
                 authorize.requestMatchers("/api/auth/**").permitAll(); // login & register
+                authorize.requestMatchers("/api/documents/**").authenticated();
                 authorize.anyRequest().authenticated();
                 
                 

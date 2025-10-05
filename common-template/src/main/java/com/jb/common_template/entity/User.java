@@ -21,4 +21,8 @@ public class User
     private String email;
     private String password;
     private String role;
+    public Object orElseThrow() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
+    }
 }
